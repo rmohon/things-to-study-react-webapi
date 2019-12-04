@@ -5,6 +5,8 @@ using System.Web.Http;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http.Cors;
+using ThingsToStudyAPI.App_Start;
+using Newtonsoft.Json.Serialization;
 
 namespace ThingsToStudyAPI
 {
@@ -13,6 +15,10 @@ namespace ThingsToStudyAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            AutofacConfig.Register();
+
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
+                new CamelCasePropertyNamesContractResolver();
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -22,10 +28,6 @@ namespace ThingsToStudyAPI
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
-            //forces WEB API to send the response in JSON format only
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(
-                new MediaTypeHeaderValue("text/html"));
 
             config.EnableCors(new EnableCorsAttribute("http://localhost:3000", "*", "*"));
         }

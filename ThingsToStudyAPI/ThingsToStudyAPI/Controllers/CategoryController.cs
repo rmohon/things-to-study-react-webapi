@@ -8,106 +8,77 @@ using System.Web.Http;
 using ThingsToStudyAPI.Models;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Threading.Tasks;
+using ThingsToStudyAPI.Data;
 
 namespace ThingsToStudyAPI.Controllers
 {
     public class CategoryController : ApiController
     {
-        public HttpResponseMessage Get()
+        private readonly ICategoryRepository _repository;
+
+        public CategoryController(ICategoryRepository repository)
         {
-            DataTable table = new DataTable();
-
-            string query = @"
-                        select CategoryID, CategoryName 
-                        from dbo.Category
-                        ";
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-            using (var cmd = new SqlCommand(query, con))
-            using (var da = new SqlDataAdapter(cmd))
-            {
-                cmd.CommandType = CommandType.Text;
-                da.Fill(table);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, table);
+            _repository = repository;
         }
 
-        public string Post(Category cat)
+        public IHttpActionResult Get()
         {
             try
             {
-                DataTable table = new DataTable();
+                var result = _repository.GetCategories();
 
-                string query = @"
-                            insert into dbo.Category values ('" + cat.CatName + @"') 
-                            ";
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Added Successfully";
+                return Ok(result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Failed to Add";
+                // TODO Add Logging
+                return InternalServerError(ex);
             }
         }
 
-        public string Put(Category cat)
+        public IHttpActionResult Post(CategoryModel cat)
         {
             try
             {
-                DataTable table = new DataTable();
+                _repository.AddCategory(cat);
 
-                string query = @"
-                            update dbo.Category set CategoryName = '" + cat.CatName + @"'
-                            where CategoryID = '" + cat.CatID + @"'
-                            ";
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Updated Successfully";
+                return Ok("Added Successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Failed to Update";
+                //TODO Add Logging
+                return InternalServerError(ex);
             }
         }
 
-        public string Delete(int id)
+        public IHttpActionResult Put(CategoryModel cat)
         {
             try
             {
-                DataTable table = new DataTable();
+                _repository.UpdateCategory(cat);
 
-                string query = @"
-                            delete from dbo.Category
-                            where CategoryID = " + id;
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Deleted Successfully";
+                return Ok("Updated Successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Failed to Delete";
+                //TODO Add Logging
+                return InternalServerError(ex);
+            }
+        }
+
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                _repository.DeleteCategory(id);
+
+                return Ok("Deleted Successfully");
+            }
+            catch (Exception ex)
+            {
+                //TODO Add Logging
+                return InternalServerError(ex);
             }
         }
     }

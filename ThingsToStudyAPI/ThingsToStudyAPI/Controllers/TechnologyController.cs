@@ -8,14 +8,23 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ThingsToStudyAPI.Models;
+using System.Threading.Tasks;
+using ThingsToStudyAPI.Data;
 
 namespace ThingsToStudyAPI.Controllers
 {
     public class TechnologyController : ApiController
     {
-        public HttpResponseMessage Get()
+        private readonly ITechnologyRepository _repository;
+
+        public TechnologyController(ITechnologyRepository repository)
         {
-            DataTable table = new DataTable();
+            _repository = repository;
+        }
+
+        public IHttpActionResult Get()
+        {
+            /*DataTable table = new DataTable();
 
             string query = @"
                           select TechID, TechName, Category, TechDescription, TechURL 
@@ -28,15 +37,25 @@ namespace ThingsToStudyAPI.Controllers
             {
                 cmd.CommandType = CommandType.Text;
                 da.Fill(table);
-            }
+            }*/
+            try
+            {
+                var result = _repository.GetTechnologies();
 
-            return Request.CreateResponse(HttpStatusCode.OK, table);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // TODO Add Logging
+                return InternalServerError(ex);
+            }
         }
 
-        public string Post(Technology tech)
+        public IHttpActionResult Post(TechnologyModel tech)
         {
             try
             {
+                /*
                 DataTable table = new DataTable();
 
                 string query = @"
@@ -55,20 +74,23 @@ namespace ThingsToStudyAPI.Controllers
                 {
                     cmd.CommandType = CommandType.Text;
                     da.Fill(table);
-                }
+                }*/
+                _repository.AddTechnology(tech);
 
-                return "Added Successfully";
+                return Ok("Added Successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Failed to Add";
+                //TODO Add logging
+                return InternalServerError(ex);
             }
         }
 
-        public string Put(Technology tech)
+        public IHttpActionResult Put(TechnologyModel tech)
         {
             try
             {
+                /*
                 DataTable table = new DataTable();
 
                 string query = @"
@@ -86,20 +108,23 @@ namespace ThingsToStudyAPI.Controllers
                 {
                     cmd.CommandType = CommandType.Text;
                     da.Fill(table);
-                }
+                }*/
 
-                return "Updated Successfully";
+                _repository.UpdateTechnology(tech);
+
+                return Ok("Updated Successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Failed to Update";
+                return InternalServerError(ex);
             }
         }
 
-        public string Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             try
             {
+                /*
                 DataTable table = new DataTable();
 
                 string query = @"
@@ -112,13 +137,15 @@ namespace ThingsToStudyAPI.Controllers
                 {
                     cmd.CommandType = CommandType.Text;
                     da.Fill(table);
-                }
+                }*/
 
-                return "Deleted Successfully";
+                _repository.DeleteTechnology(id);
+
+                return Ok("Deleted Successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Failed to Delete";
+                return InternalServerError(ex);
             }
         }
     }
