@@ -8,7 +8,7 @@ export class Category extends Component {
     
     constructor(props){
         super(props);
-        this.state = {categories:[], addModalShow : false, editModalShow:false}
+        this.state = {categories:[], addModalShow:false, editModalShow:false}
     }
 
     componentDidMount(){

@@ -19,12 +19,7 @@ namespace ThingsToStudyAPI.Repository
 
         public IEnumerable GetCategories()
         {
-            
-            var result = from c in _dbcontext.Categories
-                         orderby c.CategoryID ascending
-                         select c;
-
-            return result;
+            return _dbcontext.Categories.ToList();
         }
 
         public void AddCategory(CategoryModel cat)

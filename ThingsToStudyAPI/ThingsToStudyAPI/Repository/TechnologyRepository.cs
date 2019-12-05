@@ -19,11 +19,7 @@ namespace ThingsToStudyAPI.Repository
 
         public IEnumerable GetTechnologies()
         {
-            var result = from tech in _dbcontext.Technologies
-                         orderby tech.TechName
-                         select tech;
-
-            return result;
+            return _dbcontext.Technologies.ToList();
         }
 
         public void AddTechnology(TechnologyModel tech)

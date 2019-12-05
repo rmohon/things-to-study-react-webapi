@@ -8,7 +8,7 @@ export class Technology extends Component {
 
     constructor(props){
         super(props);
-        this.state = {technologies:[], addModalShow : false, editModalShow:false}
+        this.state = {technologies:[], addModalShow:false, editModalShow:false}
     }
 
     componentDidMount(){

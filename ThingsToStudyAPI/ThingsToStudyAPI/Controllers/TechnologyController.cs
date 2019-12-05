@@ -24,20 +24,6 @@ namespace ThingsToStudyAPI.Controllers
 
         public IHttpActionResult Get()
         {
-            /*DataTable table = new DataTable();
-
-            string query = @"
-                          select TechID, TechName, Category, TechDescription, TechURL 
-                          from dbo.Technologies
-                          ";
-
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-            using (var cmd = new SqlCommand(query, con))
-            using (var da = new SqlDataAdapter(cmd))
-            {
-                cmd.CommandType = CommandType.Text;
-                da.Fill(table);
-            }*/
             try
             {
                 var result = _repository.GetTechnologies();
@@ -55,26 +41,6 @@ namespace ThingsToStudyAPI.Controllers
         {
             try
             {
-                /*
-                DataTable table = new DataTable();
-
-                string query = @"
-                            insert into dbo.Technologies (TechName, Category, TechDescription, TechURL) 
-                            Values 
-                            (
-                            '" + tech.TechName + @"' 
-                            ,'" + tech.CatName + @"'
-                            ,'" + tech.TechDes + @"'          
-                            ,'" + tech.TechURL + @"'
-                            )";
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }*/
                 _repository.AddTechnology(tech);
 
                 return Ok("Added Successfully");
@@ -90,26 +56,6 @@ namespace ThingsToStudyAPI.Controllers
         {
             try
             {
-                /*
-                DataTable table = new DataTable();
-
-                string query = @"
-                            update dbo.Technologies set
-                            TechName = '" + tech.TechName + @"'
-                            ,Category = '" + tech.CatName + @"'
-                            ,TechDescription = '" + tech.TechDes + @"'
-                            ,TechURL = '" + tech.TechURL + @"'
-                            where TechID = '" + tech.TechID + @"'
-                            ";
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }*/
-
                 _repository.UpdateTechnology(tech);
 
                 return Ok("Updated Successfully");
@@ -124,21 +70,6 @@ namespace ThingsToStudyAPI.Controllers
         {
             try
             {
-                /*
-                DataTable table = new DataTable();
-
-                string query = @"
-                            delete from dbo.Technologies
-                            where TechID = " + id;
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TechToStudyAppDB"].ConnectionString))
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }*/
-
                 _repository.DeleteTechnology(id);
 
                 return Ok("Deleted Successfully");
