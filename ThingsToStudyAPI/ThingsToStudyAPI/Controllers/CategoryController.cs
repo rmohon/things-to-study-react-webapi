@@ -43,7 +43,7 @@ namespace ThingsToStudyAPI.Controllers
             {
                 _repository.AddCategory(cat);
 
-                return Ok("Added Successfully");
+                return Ok();
             }
             catch (Exception ex)
             {
